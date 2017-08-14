@@ -3,6 +3,9 @@ package com.example;
 import net.sourceforge.tess4j.ITesseract;
 import net.sourceforge.tess4j.Tesseract;
 import net.sourceforge.tess4j.TesseractException;
+import org.bytedeco.javacpp.BytePointer;
+import org.bytedeco.javacpp.lept;
+import org.bytedeco.javacpp.tesseract;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,6 +17,10 @@ import java.io.FileOutputStream;
 import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
+
+import static org.bytedeco.javacpp.lept.pixDestroy;
+import static org.bytedeco.javacpp.lept.pixRead;
+import static org.bytedeco.javacpp.tesseract.*;
 
 public class Calculator {
 
@@ -48,10 +55,10 @@ public class Calculator {
 
             File of = createImageFile(imgSrc);
 
-            String result = "";
+            String result = getStringFromImage(of.getAbsolutePath());
 
-            instance = new Tesseract();
-            result = processImage(instance, of, result);
+//            instance = new Tesseract();
+//            result = processImage(instance, of, result);
 
             System.out.println(result);
 
@@ -70,6 +77,35 @@ public class Calculator {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+    }
+
+    private String getStringFromImage(final String imageFilePath) {
+        try {
+            final URL tessDataResource = getClass().getResource("/");
+            final File tessFolder = new File(tessDataResource.toURI());
+            final String tessFolderPath = tessFolder.getAbsolutePath();
+            System.out.println(tessFolderPath);
+            BytePointer outText;
+            TessBaseAPI api = new TessBaseAPI();
+            api.SetVariable("tessedit_char_whitelist", "0123456789");
+//            Initializeing api
+            if (api.Init(tessFolderPath, "spa") != 0) {
+                System.err.println("ERROR");
+            }
+
+            lept.PIX image = pixRead(imageFilePath);
+            api.SetImage(image);
+            outText = api.GetUTF8Text();
+            String result = outText.getString();
+
+            api.End();
+            outText.deallocate();
+            pixDestroy(image);
+            return result;
+        } catch (Exception e) {
+            e.printStackTrace();
+            return null;
         }
     }
 

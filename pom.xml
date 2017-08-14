@@ -21,6 +21,10 @@
     </build>
     <packaging>war</packaging>
 
+    <properties>
+        <project.build.courceEncoding>UTF-8</project.build.courceEncoding>
+    </properties>
+
     <dependencies>
 
         <!-- https://mvnrepository.com/artifact/org.seleniumhq.selenium/selenium-java -->
@@ -50,6 +54,24 @@
             <artifactId>jmagick</artifactId>
             <version>6.6.9</version>
             <scope>provided</scope>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bytedeco</groupId>
+            <artifactId>javacv</artifactId>
+            <version>1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>tesseract</artifactId>
+            <version>3.04-1.1</version>
+        </dependency>
+
+        <dependency>
+            <groupId>org.bytedeco.javacpp-presets</groupId>
+            <artifactId>leptonica</artifactId>
+            <version>1.72-1.1</version>
         </dependency>
 
     </dependencies>
