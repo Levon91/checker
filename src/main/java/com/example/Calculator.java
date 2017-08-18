@@ -83,7 +83,6 @@ public class Calculator {
 //        firefoxOptions.setBinary(binary);
 //        firefoxOptions.setProfile(torProfile);
 
-
             driver = new RemoteWebDriver(new URL("http://localhost:9515"), DesiredCapabilities.chrome());
             driver.get("http://report.appa.am/PaapBureau/Report/RequestReport03");
 
@@ -218,7 +217,7 @@ public class Calculator {
 //        }
 //    }
 
-    private static String processImage(ITesseract instance, File of) {
+    private String processImage(ITesseract instance, File of) {
         String output = null;
         try {
             output = instance.doOCR(of);
@@ -228,7 +227,7 @@ public class Calculator {
         return output;
     }
 
-    private static File createImageFile(String imgSrc) throws IOException {
+    private File createImageFile(String imgSrc) throws IOException {
         imgSrc = imgSrc.substring(imgSrc.indexOf(",") + 1, imgSrc.length());
         System.out.println(imgSrc);
 
@@ -244,7 +243,7 @@ public class Calculator {
         return of;
     }
 
-    private static void wait(WebDriver driver, long duration, TimeUnit timeunit) {
+    private void wait(WebDriver driver, long duration, TimeUnit timeunit) {
         driver.manage().timeouts().implicitlyWait(duration, timeunit);
     }
 
