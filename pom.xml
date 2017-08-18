@@ -19,7 +19,7 @@
             </plugin>
         </plugins>
     </build>
-    <packaging>war</packaging>
+    <packaging>jar</packaging>
 
     <properties>
         <project.build.courceEncoding>UTF-8</project.build.courceEncoding>

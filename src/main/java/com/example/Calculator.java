@@ -1,25 +1,27 @@
 package com.example;
 
 import net.sourceforge.tess4j.ITesseract;
+import net.sourceforge.tess4j.Tesseract;
+import net.sourceforge.tess4j.TesseractException;
+import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
-import org.openqa.selenium.firefox.FirefoxBinary;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.firefox.FirefoxOptions;
-import org.openqa.selenium.firefox.FirefoxProfile;
+import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.DesiredCapabilities;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
-import java.awt.image.ColorConvertOp;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
+import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
 public class Calculator {
 
-    private static final String IMG_DIRECTORY = "./src/main/resources/images/";
+    private static final String IMG_DIRECTORY = "src/main/resources/images/";
     private static final String IMG_EXTENSION = ".png";
 
     public static void main(String[] args) {
@@ -28,45 +30,46 @@ public class Calculator {
     }
 
     public void startShow() {
-        FirefoxDriver driver;
+//        FirefoxDriver driver;
+        WebDriver driver;
         ITesseract instance;
 
-//        try {
+        try {
 
 //        String torPath = "E:/tor/start.exe";
 //        String torProfilePath = "E:/tor/Browser/firefox.exe";
 
-        File torProfileDir = new File("C:\\Users\\levont\\Desktop\\TorBrowser\\Browser\\TorBrowser\\Data\\Browser\\profile.default");
-        FirefoxBinary binary = new FirefoxBinary(new File("C:\\Users\\levont\\Desktop\\TorBrowser\\Browser\\firefox.exe"));
-        FirefoxProfile torProfile = new FirefoxProfile(torProfileDir);
-        torProfile.setPreference("webdriver.load.strategy", "unstable");
-
-        try {
-            binary.startProfile(torProfile, torProfileDir, "");
-            FirefoxProfile profile = new FirefoxProfile();
-            profile.setPreference("network.proxy.type", 1);
-//            profile.setPreference("network.proxy.socks", "127.0.0.1");
-            profile.setPreference("network.proxy.socks_port", 9150);
-            profile.setPreference("network.proxy.socks_version", 5);
-            profile.setPreference("places.history.enabled", false);
-            profile.setPreference("privacy.clearOnShutdown.offlineApps", true);
-            profile.setPreference("privacy.clearOnShutdown.passwords", true);
-            profile.setPreference("privacy.clearOnShutdown.siteSettings", true);
-            profile.setPreference("privacy.sanitize.sanitizeOnShutdown", true);
-            profile.setPreference("signon.rememberSignons", false);
-            profile.setPreference("network.cookie.lifetimePolicy", 2);
-            profile.setPreference("network.dns.disablePrefetch", true);
-            profile.setPreference("network.http.sendRefererHeader", 0);
-            profile.setPreference("permissions.default.image", 2);
-            profile.setPreference("network.proxy.socks_remote_dns", true);
-
-            driver = new FirefoxDriver(profile);
-
-            driver.manage().window().maximize();
-        } catch (IOException e) {
-            System.out.println("ERROR occurred");
-            e.printStackTrace();
-        }
+//        File torProfileDir = new File("C:\\Users\\levont\\Desktop\\TorBrowser\\Browser\\TorBrowser\\Data\\Browser\\profile.default");
+//        FirefoxBinary binary = new FirefoxBinary(new File("C:\\Users\\levont\\Desktop\\TorBrowser\\Browser\\firefox.exe"));
+//        FirefoxProfile torProfile = new FirefoxProfile(torProfileDir);
+//        torProfile.setPreference("webdriver.load.strategy", "unstable");
+//
+//        try {
+//            binary.startProfile(torProfile, torProfileDir, "");
+//            FirefoxProfile profile = new FirefoxProfile();
+//            profile.setPreference("network.proxy.type", 1);
+////            profile.setPreference("network.proxy.socks", "127.0.0.1");
+//            profile.setPreference("network.proxy.socks_port", 9150);
+//            profile.setPreference("network.proxy.socks_version", 5);
+//            profile.setPreference("places.history.enabled", false);
+//            profile.setPreference("privacy.clearOnShutdown.offlineApps", true);
+//            profile.setPreference("privacy.clearOnShutdown.passwords", true);
+//            profile.setPreference("privacy.clearOnShutdown.siteSettings", true);
+//            profile.setPreference("privacy.sanitize.sanitizeOnShutdown", true);
+//            profile.setPreference("signon.rememberSignons", false);
+//            profile.setPreference("network.cookie.lifetimePolicy", 2);
+//            profile.setPreference("network.dns.disablePrefetch", true);
+//            profile.setPreference("network.http.sendRefererHeader", 0);
+//            profile.setPreference("permissions.default.image", 2);
+//            profile.setPreference("network.proxy.socks_remote_dns", true);
+//
+//            driver = new FirefoxDriver(profile);
+//
+//            driver.manage().window().maximize();
+//        } catch (IOException e) {
+//            System.out.println("ERROR occurred");
+//            e.printStackTrace();
+//        }
 
 //        FirefoxOptions options = new FirefoxOptions();
 //        options.setBinary(binary);
@@ -81,65 +84,109 @@ public class Calculator {
 //        firefoxOptions.setProfile(torProfile);
 
 
-//
-//            driver.findElement(By.xpath(".//*[@id='vehicleNumber']")).sendKeys("35FT311");
-//            wait(driver, 3, TimeUnit.SECONDS);
-//
-//            driver.findElement(By.xpath(".//*[@id='requestDateTime']")).sendKeys("24.08.2017");
-//
-//            wait(driver, 3, TimeUnit.SECONDS);
-//            driver.findElement(By.className("ui-datepicker-close")).click();
-//
-//            WebElement img = driver.findElement(By.xpath("//img[contains(@title,'Փոխել')]"));
-//
-//            String imgSrc = img.getAttribute("src");
-//
-//            File of = createImageFile(imgSrc);
-//
-//            boolean isScaled = grayScaleImage(of);
-//            if (isScaled) {
-//                System.out.println("SCALED");
-//            }
-//
-////            String result = getStringFromImage(of.getAbsolutePath());
-//
-////            instance = new Tesseract();
-////            result = processImage(instance, of, result);
-//
-////            System.out.println(result);
-//
-//            driver.findElement(By.xpath(".//*[@id='inp-captcha']")).sendKeys("");
-//            wait(driver, 3, TimeUnit.SECONDS);
-//
-//
-//            driver.findElement(By.xpath(".//*[@id='isAgree']")).click();
-//            wait(driver, 3, TimeUnit.SECONDS);
-//
-//            driver.findElement(By.xpath(".//*[@id='btn-request']")).click();
-//
-//            wait(driver, 5, TimeUnit.SECONDS);
-//
-//            driver.quit();
+            driver = new RemoteWebDriver(new URL("http://localhost:9515"), DesiredCapabilities.chrome());
+            driver.get("http://report.appa.am/PaapBureau/Report/RequestReport03");
 
-//        } catch (IOException e) {
-//            e.printStackTrace();
-//        }
+            driver.manage().window().maximize();
+
+            driver.manage().timeouts().pageLoadTimeout(5L, TimeUnit.SECONDS);
+
+            driver.findElement(By.xpath(".//*[@id='vehicleNumber']")).sendKeys("35FT311");
+            wait(driver, 3, TimeUnit.SECONDS);
+
+            driver.findElement(By.xpath(".//*[@id='requestDateTime']")).sendKeys("24.08.2017");
+
+            wait(driver, 3, TimeUnit.SECONDS);
+            driver.findElement(By.className("ui-datepicker-close")).click();
+
+            WebElement img = driver.findElement(By.xpath("//img[contains(@title,'Փոխել')]"));
+
+            String imgSrc = img.getAttribute("src");
+
+            File of = createImageFile(imgSrc);
+
+            File converted = grayScaleImage(of);
+
+            if (converted.exists()) {
+                System.out.println("SCALED");
+            }
+
+//            String result = getStringFromImage(of.getAbsolutePath());
+
+            String result;
+            instance = new Tesseract();
+            result = processImage(instance, of);
+
+            System.out.println(result);
+
+            driver.findElement(By.xpath(".//*[@id='inp-captcha']")).sendKeys("");
+            wait(driver, 3, TimeUnit.SECONDS);
+
+
+            driver.findElement(By.xpath(".//*[@id='isAgree']")).click();
+            wait(driver, 3, TimeUnit.SECONDS);
+
+            driver.findElement(By.xpath(".//*[@id='btn-request']")).click();
+
+            wait(driver, 5, TimeUnit.SECONDS);
+
+            driver.quit();
+
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
     }
 
-    private boolean grayScaleImage(final File image) throws IOException {
+    private File grayScaleImage(File image) throws IOException {
         BufferedImage master;
         BufferedImage grayScale;
-        BufferedImage blackWhite;
-        master = ImageIO.read(new File(image.getAbsolutePath()));
-        grayScale = ImageIO.read(new File(image.getAbsolutePath()));
-        ColorConvertOp op = new ColorConvertOp(ColorSpace.getInstance(ColorSpace.CS_GRAY), null);
-        op.filter(grayScale, grayScale);
+        File output;
 
-        blackWhite = new BufferedImage(master.getWidth(), master.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
-        Graphics2D g2d = blackWhite.createGraphics();
-        g2d.drawImage(master, 0, 0, null);
-        g2d.dispose();
-        return ImageIO.write(grayScale, "png", image);
+        master = ImageIO.read(new File(image.getAbsolutePath()));
+        grayScale = changeColor(master, ColorSpace.CS_LINEAR_RGB, ColorSpace.CS_GRAY);
+
+        fillPixels(grayScale);
+
+        output = new File(image.getAbsolutePath());
+        ImageIO.write(grayScale, "png", output);
+        return output;
+    }
+
+    private void fillPixels(BufferedImage grayScale) {
+        final int width = grayScale.getWidth();
+        final int height = grayScale.getHeight();
+
+        for (int i = 0; i < width - 1; i++) {
+            for (int j = 0; j < height - 1; j++) {
+                int rgb = grayScale.getRGB(i, j);
+                if (rgb != 0) {
+                    if (j < width) {
+                        int next = grayScale.getRGB(i, j++);
+                        if (next == 0 /*& prev == 0*/) {
+                            grayScale.setRGB(i, j, Color.BLACK.getRGB());
+                        }
+                    }
+//                    int prev = grayScale.getRGB(i, j - 1);
+                }
+            }
+        }
+    }
+
+    private BufferedImage changeColor(BufferedImage image, int srcColor, int replaceColor) {
+        BufferedImage destImage = new BufferedImage(image.getWidth(), image.getHeight(), BufferedImage.TYPE_BYTE_BINARY);
+        Graphics2D g = destImage.createGraphics();
+        g.drawImage(image, null, 0, 0);
+        g.dispose();
+
+        for (int width = 0; width < image.getWidth(); width++) {
+            for (int height = 0; height < image.getHeight(); height++) {
+
+                if (destImage.getRGB(width, height) == srcColor) {
+                    destImage.setRGB(width, height, replaceColor);
+                }
+            }
+        }
+        return destImage;
     }
 
 //    private String getStringFromImage(final String imageFilePath) {
@@ -171,14 +218,15 @@ public class Calculator {
 //        }
 //    }
 
-//    private static String processImage(ITesseract instance, File of, String result) {
-//        try {
-//            result = instance.doOCR(of);
-//        } catch (TesseractException e) {
-//            e.printStackTrace();
-//        }
-//        return result;
-//    }
+    private static String processImage(ITesseract instance, File of) {
+        String output = null;
+        try {
+            output = instance.doOCR(of);
+        } catch (TesseractException e) {
+            e.printStackTrace();
+        }
+        return output;
+    }
 
     private static File createImageFile(String imgSrc) throws IOException {
         imgSrc = imgSrc.substring(imgSrc.indexOf(",") + 1, imgSrc.length());
