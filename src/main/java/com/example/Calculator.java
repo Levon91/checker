@@ -13,6 +13,8 @@ import javax.imageio.ImageIO;
 import java.awt.*;
 import java.awt.color.ColorSpace;
 import java.awt.image.BufferedImage;
+import java.awt.image.DataBufferByte;
+import java.awt.image.Raster;
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -145,29 +147,39 @@ public class Calculator {
         grayScale = changeColor(master, ColorSpace.CS_LINEAR_RGB, ColorSpace.CS_GRAY);
 
         fillPixels(grayScale);
-
+//        fillPixels2(grayScale);
         output = new File(image.getAbsolutePath());
         ImageIO.write(grayScale, "png", output);
         return output;
     }
 
     private void fillPixels(BufferedImage grayScale) {
-        final int width = grayScale.getWidth();
-        final int height = grayScale.getHeight();
-
+        Raster data = grayScale.getData();
+        int width = grayScale.getWidth();
+        int height = grayScale.getHeight();
         for (int i = 0; i < width - 1; i++) {
             for (int j = 0; j < height - 1; j++) {
-                int rgb = grayScale.getRGB(i, j);
-                if (rgb != 0) {
-                    if (j < width) {
-                        int next = grayScale.getRGB(i, j++);
-                        if (next == 0 /*& prev == 0*/) {
-                            grayScale.setRGB(i, j, Color.BLACK.getRGB());
+                for (int k = 0; k < grayScale.getRaster().getNumBands(); k++) {
+                    final int value = grayScale.getRaster().getSample(i, j, k);
+                    if (value != 0) {
+                        if (j < width) {
+                            final int nextValue = grayScale.getRaster().getSample(i, j, k);
+                            if (nextValue == 0 /*& prev == 0*/) {
+                                grayScale.setRGB(i, j, Color.BLACK.getRGB());
+                            }
                         }
-                    }
 //                    int prev = grayScale.getRGB(i, j - 1);
+                    }
                 }
             }
+        }
+    }
+
+    private void fillPixels2(BufferedImage grayScale) {
+        byte[] pixels = ((DataBufferByte) grayScale.getRaster().getDataBuffer()).getData();
+
+        for (int i = 0; i < pixels.length - 1; i++) {
+            System.out.println(pixels[i]);
         }
     }
 
