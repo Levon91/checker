@@ -1,15 +1,9 @@
 package com.example.scanner.impl;
 
 import com.example.scanner.ImageScanner;
-import org.bytedeco.javacpp.BytePointer;
-import org.bytedeco.javacpp.lept.PIX;
-import org.bytedeco.javacpp.tesseract;
 
 import java.io.File;
-import java.net.URL;
 
-import static org.bytedeco.javacpp.lept.pixDestroy;
-import static org.bytedeco.javacpp.lept.pixRead;
 import static org.bytedeco.javacpp.opencv_core.*;
 import static org.bytedeco.javacpp.opencv_imgcodecs.cvLoadImage;
 import static org.bytedeco.javacpp.opencv_imgproc.*;
