@@ -25,7 +25,7 @@ public class ImageUtils {
     public static String getDigitsFromImage(String imagePath) {
         BytePointer outText;
 
-        tesseract.TessBaseAPI api = new tesseract.TessBaseAPI();
+        tesseract.TessBaseAPI api = new tesseract.TessBaseAPI(5);
         // Initialize tesseract-ocr with English, without specifying tessdata path
         if (api.Init(".", "ENG") != 0) {
             System.err.println("Could not initialize tesseract.");
@@ -36,14 +36,13 @@ public class ImageUtils {
         lept.PIX image = pixRead(imagePath);
         api.SetImage(image);
         // Get OCR result
-        outText = api.GetUTF8Text();
-        String string = outText.getString();
+        int numDawgs = api.NumDawgs();
+        String string = String.valueOf(numDawgs);
         assertTrue(!string.isEmpty());
         System.out.println("OCR output:\n" + string);
 
         // Destroy used object and release memory
         api.End();
-        outText.deallocate();
         pixDestroy(image);
 
         return string;

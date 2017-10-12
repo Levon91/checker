@@ -1,7 +1,6 @@
 package com.example.demo;
 
-import net.sourceforge.tess4j.ITesseract;
-import net.sourceforge.tess4j.Tesseract;
+import com.example.utils.Utils;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
@@ -14,8 +13,7 @@ import java.io.IOException;
 import java.net.URL;
 import java.util.concurrent.TimeUnit;
 
-import static com.example.utils.ImageUtils.getDigitsFromImage;
-import static com.example.utils.ImageUtils.processImage;
+import static com.example.utils.ImageUtils.grayScaleImage;
 
 public class CalculatorDemo {
 
@@ -27,14 +25,15 @@ public class CalculatorDemo {
         calculator.startShow();
     }
 
-    public void startShow() {
+    private void startShow() {
 //        FirefoxDriver driver;
         WebDriver driver;
-        ITesseract instance;
+//        ITesseract instance;
 
         try {
 
             driver = new RemoteWebDriver(new URL("http://localhost:9515"), DesiredCapabilities.chrome());
+            driver.manage().timeouts().implicitlyWait(10, TimeUnit.SECONDS);
             driver.get("http://report.appa.am/PaapBureau/Report/RequestReport03");
 
             driver.manage().window().maximize();
@@ -44,7 +43,7 @@ public class CalculatorDemo {
             driver.findElement(By.xpath(".//*[@id='vehicleNumber']")).sendKeys("35FT311");
             wait(driver, 3, TimeUnit.SECONDS);
 
-            driver.findElement(By.xpath(".//*[@id='requestDateTime']")).sendKeys("24.08.2017");
+            driver.findElement(By.xpath(".//*[@id='requestDateTime']")).sendKeys("24.08.2017 00:00");
 
             wait(driver, 3, TimeUnit.SECONDS);
             driver.findElement(By.className("ui-datepicker-close")).click();
@@ -55,9 +54,9 @@ public class CalculatorDemo {
 
             File of = createImageFile(imgSrc);
 
-//            File converted = grayScaleImage(of);
-            String digits = getDigitsFromImage(of.getAbsolutePath());
-            System.out.println(digits);
+            File converted = grayScaleImage(of);
+//            String digits = getDigitsFromImage(converted.getAbsolutePath());
+//            System.out.println(digits);
 
 //            BufferedImage image = ImageIO.read(of);
 //            BufferedImage scaledInstance = getScaledInstance(image, image.getWidth(), image.getHeight());
@@ -71,11 +70,11 @@ public class CalculatorDemo {
 
 //            String result = getStringFromImage(of.getAbsolutePath());
 
-            String result;
-            instance = new Tesseract();
-            result = processImage(instance, of);
+//            String result;
+//            instance = new Tesseract();
+//            result = processImage(instance, of);
 
-            System.out.println(result);
+//            System.out.println(result);
 
             driver.findElement(By.xpath(".//*[@id='inp-captcha']")).sendKeys("");
             wait(driver, 3, TimeUnit.SECONDS);
@@ -88,13 +87,19 @@ public class CalculatorDemo {
 
             wait(driver, 5, TimeUnit.SECONDS);
 
+            WebElement requestResult = driver.findElement(By.className("report-tbl"));
+
+            String resultText = requestResult.getText();
+
+            Utils.createPdfFile(String.valueOf(System.currentTimeMillis()), resultText);
+            System.out.println(resultText);
+
             driver.quit();
 
         } catch (IOException e) {
             e.printStackTrace();
         }
     }
-
 
     private File createImageFile(String imgSrc) throws IOException {
         imgSrc = imgSrc.substring(imgSrc.indexOf(",") + 1, imgSrc.length());
